@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hangman 2 player</title>
+<style>
+body {
+  background-color: white;
+  font-family: helvetica;
+}
+#guessed {
+  position: absolute;
+  top: 90%;
+  font-size: 100%;
+}
+#lives {
+  position: absolute;
+  top: 50%;
+  font-size: 100%;
+}
+</style>
+</head>
+<body id="body">
+<div id="word"></div>
+<div id="lives"></div>
+<div id="guessed"></div>
+<script>
+var guessed = [];
+var guess_var = '';
+var word = prompt('What is your word');
+var letter_array = [
+  '',
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'w',
+  'x',
+  'y',
+  'z',
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'S',
+  'T',
+  'U',
+  'V',
+  'W',
+  'X',
+  'Y',
+  'Z',
+];
+var word_guess = [];
+var word_guess2 = [];
+var lives = 6;
+
+for (var i = 0; i < word.length; i++) {
+  var a = word.slice(i, i + 1);
+  if (a === ' ') {
+    word_guess[i] = a;
+    word_guess2[i] = a;
+  } else {
+    word_guess[i] = '_';
+    word_guess2[i] = a;
+  }
+}
+function update_guess() {
+  document.getElementById('guessed').innerHTML = guessed;
+}
+function update_lives() {
+  document.getElementById('lives').innerHTML = 'chances: ' + lives;
+}
+function update_word() {
+  document.getElementById('word').innerHTML = word_guess;
+}
+document.addEventListener('keyup', function (event) {
+  if (letter_array.indexOf(event.key) > 0) {
+    var pressed = event.key;
+    for (var i = 0; i < word_guess2.length; i++) {
+      var v = word_guess2.slice(i, i + 1);
+      if (v.indexOf(pressed) > -1) {
+        word_guess[i] = pressed;
+      }
+    }
+    var d = 0;
+    for (var i = 0; i < word_guess2.length; i++) {
+      if (word_guess2[i] === word_guess[i]) {
+        d++;
+      }
+    }
+    if (d === word_guess2.length) {
+      console.log('you won');
+      clearInterval(setword);
+      document.getElementById('word').innerHTML = 'you won';
+      setTimeout(function () {
+        guessed = [];
+        guess_var = '';
+        word = prompt();
+        word_guess = [];
+        word_guess2 = [];
+        lives = 6;
+        setword = setInterval(update_word, 10);
+        for (var i = 0; i < word.length; i++) {
+          var a = word.slice(i, i + 1);
+          if (a === ' ') {
+            word_guess[i] = a;
+            word_guess2[i] = a;
+          } else {
+            word_guess[i] = '_';
+            word_guess2[i] = a;
+          }
+        }
+      }, 2500);
+    }
+    if (word.indexOf(pressed) < 0) {
+      guess_var = guess_var + pressed;
+      for (var i = 0; i < guess_var.length; i++) {
+        var a = guess_var.slice(i, i + 1);
+        guessed[i] = a;
+      }
+      lives--;
+      if (lives === 0) {
+        clearInterval(setword);
+        clearInterval(setlives);
+        clearInterval(set_guess);
+        document.getElementById('body').innerHTML =
+          'you lost now refresh the website to play again ';
+      }
+    }
+  }
+});
+var setword = setInterval(update_word, 10);
+var set_guess = setInterval(update_guess, 10);
+var setlive = setInterval(update_lives, 10);
+
+</script>
+</body>
+
+</html>
