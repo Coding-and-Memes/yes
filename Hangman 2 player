@@ -2,6 +2,24 @@
 <html>
 <head>
 <title>Hangman 2 player</title>
+</style>
+</head>
+<body>
+<div id="body1">
+  <div id="word"></div>
+  <div id="lives"></div>
+  <div id="guessed"></div>
+  <div id="person">
+    <div id="head">
+      <div id="eye1"></div>
+      <div id="eye2"></div>
+    </div>
+    <div id="body"></div>
+    <div id="l-arm"></div>
+    <div id="r-arm"></div>
+    <div id="l-leg"></div>
+    <div id="r-leg"></div>
+  </div>
 <style>
 body {
   background-color: white;
@@ -11,18 +29,99 @@ body {
   position: absolute;
   top: 90%;
   font-size: 100%;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 #lives {
   position: absolute;
   top: 50%;
   font-size: 100%;
 }
+#person {
+  position:absolute;
+  top:20%;
+  left:80%;
+}
+#body {
+  position:absolute;
+  width: 10px;
+  height: 100px;
+  top:105px;
+  left:44px;
+  background-color: black;
+  border-radius: 100px;
+  border:3px solid black;
+}
+#head {
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+  border:3px solid black;
+}
+#eye1 {
+  position:absolute;
+  width: 20px;
+  height: 20px;
+  top:30px;
+  background-color: black;
+  border-radius: 100px;
+  border:3px solid black;
+}
+#eye2 {
+  position:absolute;
+  width: 20px;
+  height: 20px;
+  top:30px;
+  left:77px;
+  background-color: black;
+  border-radius: 100px;
+  border:3px solid black;
+}
+#l-arm {
+  position:absolute;
+  width: 10px;
+  height: 70px;
+  top:97px;
+  left:23px;
+  transform: rotate(225deg);
+  background-color: black;
+  border-radius: 100px;
+  border:3px solid black;
+}
+#r-arm {
+  position:absolute;
+  width: 10px;
+  height: 70px;
+  top:97px;
+  left:65px;
+  transform: rotate(135deg);
+  background-color: black;
+  border-radius: 100px;
+  border:3px solid black;
+}
+#l-leg {
+  position:absolute;
+  width: 10px;
+  height: 70px;
+  top:187px;
+  left:23px;
+  transform: rotate(225deg);
+  background-color: black;
+  border-radius: 100px;
+  border:3px solid black;
+}
+#r-leg {
+  position:absolute;
+  width: 10px;
+  height: 70px;
+  top:187px;
+  left:65px;
+  transform: rotate(135deg);
+  background-color: black;
+  border-radius: 100px;
+  border:3px solid black;
+}
 </style>
-</head>
-<body id="body">
-<div id="word"></div>
-<div id="lives"></div>
-<div id="guessed"></div>
 <script>
 var guessed = [];
 var guess_var = '';
@@ -95,6 +194,29 @@ for (var i = 0; i < word.length; i++) {
     word_guess2[i] = a;
   }
 }
+
+function update_man() {
+  if (lives === 6) {
+    document.getElementById("head").style.opacity = "0%";
+    document.getElementById("body").style.opacity = "0%";
+    document.getElementById("l-arm").style.opacity = "0%";
+    document.getElementById("r-arm").style.opacity = "0%";
+    document.getElementById("l-leg").style.opacity = "0%";
+    document.getElementById("r-leg").style.opacity = "0%";
+  } else if (lives === 5) {
+    document.getElementById("head").style.opacity = "100%";
+  } else if (lives === 4) {
+    document.getElementById("body").style.opacity = "100%";
+  } else if (lives === 3) {
+    document.getElementById("l-arm").style.opacity = "100%";
+  } else if (lives === 2) {
+    document.getElementById("r-arm").style.opacity = "100%";
+  } else if (lives === 1) {
+    document.getElementById("l-leg").style.opacity = "100%";
+  } else if (lives < 1) {
+    document.getElementById("r-leg").style.opacity = "100%";
+  }
+}
 function update_guess() {
   document.getElementById('guessed').innerHTML = guessed;
 }
@@ -150,12 +272,13 @@ document.addEventListener('keyup', function (event) {
         guessed[i] = a;
       }
       lives--;
-      if (lives === 0) {
+      if (lives < 1) {
         clearInterval(setword);
-        clearInterval(setlives);
+        clearInterval(setlive);
         clearInterval(set_guess);
-        document.getElementById('body').innerHTML =
-          'you lost now refresh the website to play again ';
+        clearInterval(setman);
+        document.getElementById('body1').innerHTML =
+          'you lost now refresh the website to play again the word was: ' + word;
       }
     }
   }
@@ -163,8 +286,10 @@ document.addEventListener('keyup', function (event) {
 var setword = setInterval(update_word, 10);
 var set_guess = setInterval(update_guess, 10);
 var setlive = setInterval(update_lives, 10);
-
+var setman = setInterval(update_man, 10);
 </script>
+</div>
+
 </body>
 
 </html>
